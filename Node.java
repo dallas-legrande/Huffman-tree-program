@@ -11,12 +11,13 @@ package huffmancode;
  */
 
 public class Node implements Comparable<Node>{
-    public int iData;           // data item (key)
-    public char dData;        // data item
+    public int iData;           // char as an ascii number (key)
+    public char dData;        // char
     public int frequency = 1;   // number of times this node is used
     public Node leftChild;      // this Node's left child
     public Node rightChild;     // this Node's right child
-    
+    public String binaryCode;   // this nodes binary number according to the huffman tree
+    public Node parent;
 
     public void displayNode() { // display ourself
             System.out.print('{');
@@ -36,14 +37,10 @@ public class Node implements Comparable<Node>{
 
     @Override
     public int compareTo(Node o) {
-        
-//        if(this == o)
-//        {
-//            if(this.leftChild != null)
-//            {
-//                return -1;
-//            }
-//        }
         return frequency - o.frequency;
+    }
+    public void addToBinary(String a)
+    {
+        binaryCode = binaryCode + (a);
     }
 }
