@@ -36,6 +36,7 @@ public class HuffmanCode{
         
         HuffmanCode code = new HuffmanCode();
         code.readFile();
+        code.createHuffTree();
     }
     
     //reads the file and prints it to the screen
@@ -91,8 +92,8 @@ public class HuffmanCode{
                         pw.println(line);
                     }
                 
-                //displays all the nodes in the tree for testing purposes
-                   theTree.displayTree();
+//                //displays all the nodes in the tree for testing purposes
+//                   theTree.displayTree();
                    
                    //prints the total number of nodes
                    System.out.println(theTree.nodeCount);
@@ -153,6 +154,17 @@ public class HuffmanCode{
     //frequency of parent node = left child frequency plus right child frequency
     public void createHuffTree()
     {
+        while(pq.size() > 1){
+            Node leftChild = (Node) pq.poll();
+            Node rightChild = (Node) pq.poll();
+            Node parent = new Node();
+            //int key = leftChild.frequency + rightChild.frequency;
+            parent.frequency = (leftChild.frequency + rightChild.frequency);
+            parent.leftChild = leftChild;
+            parent.rightChild = rightChild;
+            pq.add(parent);
+        }
+        Node root = (Node) pq.poll();
         
     }
     
