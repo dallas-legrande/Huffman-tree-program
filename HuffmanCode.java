@@ -29,6 +29,8 @@ public class HuffmanCode{
     private int index = 0;
     private Tree theTree = new Tree();
     private Tree huffmanTree = new Tree();
+    private Node huffRoot;
+    private Node n;
     PriorityQueue<Node> pq = new PriorityQueue<Node>();
     
     
@@ -37,6 +39,8 @@ public class HuffmanCode{
         HuffmanCode code = new HuffmanCode();
         code.readFile();
         code.createHuffTree();
+        code.createCodeTable();
+      
     }
     
     //reads the file and prints it to the screen
@@ -132,6 +136,8 @@ public class HuffmanCode{
         int i = 0;
         while(nodes[i] != null)
         {
+            nodes[i].leftChild = null;
+            nodes[i].rightChild = null;
             pq.add(nodes[i]);
             i++;
         }
@@ -158,20 +164,64 @@ public class HuffmanCode{
             Node leftChild = (Node) pq.poll();
             Node rightChild = (Node) pq.poll();
             Node parent = new Node();
-            //int key = leftChild.frequency + rightChild.frequency;
             parent.frequency = (leftChild.frequency + rightChild.frequency);
             parent.leftChild = leftChild;
             parent.rightChild = rightChild;
+            parent.iData = 0;
+            leftChild.parent = parent;
+            rightChild.parent = parent;
+            
+            // starts the binary code for each node with whether they are a left or right child
+            if(leftChild.binaryCode == null)
+            {   
+                leftChild.binaryCode = ("0");
+            }
+            if(rightChild.binaryCode == null)
+            {   
+                rightChild.binaryCode = ("1");
+            }
+            
             pq.add(parent);
         }
-        Node root = (Node) pq.poll();
+        huffRoot = (Node) pq.poll();
         
+        
+    }
+    public void huffTree(Node a, Node b)
+    {
+        Node parent = new Node();
+        parent.leftChild = a;
+        parent.rightChild = b;
+        parent.frequency = a.frequency + b.frequency;
     }
     
     //creates the code table based on the huffman binary tree
     public void createCodeTable()
     {
+        // goes through all of the nodes and adds the binary codes of each of the parent nodes all the way to the root
+        // each node then has the binary code for itself as part of the node
+        int i = 0;
+        while(nodes[i] != null)
+            {
+            n = nodes[i].parent;
+            while(n != huffRoot)
+            {
+                if(n.binaryCode != null){
+                nodes[i].binaryCode = n.binaryCode + nodes[i].binaryCode;
+                n = n.parent;
+                }
+            }
+            i++;
+        }
         
+        //prints the code table for testing
+        System.out.println("Code Table");
+        System.out.println("---------------");
+        int k = 0;
+        while(nodes[k] != null){
+            System.out.println(nodes[k].dData + " | " + nodes[k].binaryCode);
+            k++;
+        }
     }
     
     //reads the file and converts the characters to binary according to the code table
@@ -185,10 +235,5 @@ public class HuffmanCode{
     {
         
     }
-
-
-    
-
-   
 
 }
