@@ -244,10 +244,10 @@ class Tree {
 	}
 
 	
-	public void displayTree() {
+	public void displayTree(Node localRoot) {
 		Stack<Node> globalStack = new Stack<Node>();
-		globalStack.push(root);
-		int nBlanks = nodeCount;
+		globalStack.push(localRoot);
+		int nBlanks = 32;
 		boolean isRowEmpty = false;
 		System.out.println(
 				".................................................................");
