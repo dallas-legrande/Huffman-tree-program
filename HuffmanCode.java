@@ -184,15 +184,9 @@ public class HuffmanCode{
             pq.add(parent);
         }
         huffRoot = (Node) pq.poll();
+        huffmantree.displayTree(huffRoot);
         
         
-    }
-    public void huffTree(Node a, Node b)
-    {
-        Node parent = new Node();
-        parent.leftChild = a;
-        parent.rightChild = b;
-        parent.frequency = a.frequency + b.frequency;
     }
     
     //creates the code table based on the huffman binary tree
