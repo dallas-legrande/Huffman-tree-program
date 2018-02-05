@@ -237,8 +237,8 @@ class Tree {
 		if (localRoot != null) {
 			postOrder(localRoot.leftChild);
 			postOrder(localRoot.rightChild);
-			return localRoot;
-                        //System.out.print(localRoot.iData + " ");		
+                        System.out.print(localRoot.dData + " ");		
+                        return localRoot;
 		}
                 return localRoot;
 	}
@@ -247,7 +247,7 @@ class Tree {
 	public void displayTree(Node localRoot) {
 		Stack<Node> globalStack = new Stack<Node>();
 		globalStack.push(localRoot);
-		int nBlanks = 32;
+		int nBlanks = 288+32+64+64+64+64;
 		boolean isRowEmpty = false;
 		System.out.println(
 				".................................................................");
@@ -262,6 +262,17 @@ class Tree {
 			while (globalStack.isEmpty()==false) {
 				Node temp = (Node) globalStack.pop();
 				if (temp != null) {
+                                        if(temp.dData == 0)
+                                        {
+                                            System.out.print("NODE");
+                                            localStack.push(temp.leftChild);
+                                            localStack.push(temp.rightChild);
+                                            if (temp.leftChild != null ||
+                                                            temp.rightChild != null) {
+                                                    isRowEmpty = false;
+                                            }
+                                        }
+                                        else{
 					System.out.print(temp.dData);
 					localStack.push(temp.leftChild);
 					localStack.push(temp.rightChild);
@@ -269,6 +280,7 @@ class Tree {
 							temp.rightChild != null) {
 						isRowEmpty = false;
 					}
+                                        }
 				}
 				else {
 					System.out.print("--");
@@ -281,12 +293,17 @@ class Tree {
 				}
 			} 
 			System.out.println();
-			nBlanks /= 2;
+
+                            nBlanks /= 2;
+
 			while (localStack.isEmpty()==false) {
 				globalStack.push(localStack.pop());
 			} // end while isRowEmpty is false
-			System.out.println(
-			".................................................................");
+                        for(int k = 0; k < 1000; k++){
+                            System.out.print(".");
+                        }
+                        System.out.println();
+			
 		}// end while globalStack not empty
 	} // end displayTree()
         public Node findMin(){
@@ -303,5 +320,11 @@ class Tree {
                 }
             return max;
         }
+        
+        public void printNodes(Node root)
+        {
+            
+        }
+    
 }// end class Tree
 ////////////////////////////////////////////////////////////////
