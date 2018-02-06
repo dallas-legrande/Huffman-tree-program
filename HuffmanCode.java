@@ -40,6 +40,7 @@ public class HuffmanCode{
         code.readFile();
         code.createHuffTree();
         code.createCodeTable();
+        code.encodeMessage();
       
     }
     
@@ -74,20 +75,20 @@ public class HuffmanCode{
                             //the idata is the character as an ascii number
                             //the ddata is the actual character
                             Node newNode = theTree.insert((int) stringToChar[i],stringToChar[i]);
-                            if (newNode == null)
-                            {            
-                            }
-                            
-                            //puts the node into a Node array
-                            else{
+                            if (newNode != null)
+                            {     
                                 nodes[index] = newNode;
                                 index++;
                             }
-                           
+                            
                         }
-                        //adds ` after each line so you know where the line breaks
-                        nodes[index+1] = theTree.insert((int) '`','`');
-                        index += 2;
+                        //adds ` after each line so you know where the line breaks are 10 is the ascii code for line feed
+                        Node newNode = theTree.insert(10 ,' ');
+                        if (newNode != null)
+                            {     
+                                nodes[index] = newNode;
+                                index++;
+                            }
                         
                         //prints out to the system
                         System.out.println(line);
@@ -171,7 +172,7 @@ public class HuffmanCode{
             leftChild.parent = parent;
             rightChild.parent = parent;
             
-            // starts the binary code for each node with whether they are a left or right child
+            // starts the binary code for each node if they are a left node the get a 0 if they are a right child node they get a 1
             if(leftChild.binaryCode == null)
             {   
                 leftChild.binaryCode = ("0");
@@ -184,15 +185,10 @@ public class HuffmanCode{
             pq.add(parent);
         }
         huffRoot = (Node) pq.poll();
+        //huffmanTree.postOrder(huffRoot);
+        //printTree(huffRoot);
+        huffmanTree.displayTree(huffRoot);
         
-        
-    }
-    public void huffTree(Node a, Node b)
-    {
-        Node parent = new Node();
-        parent.leftChild = a;
-        parent.rightChild = b;
-        parent.frequency = a.frequency + b.frequency;
     }
     
     //creates the code table based on the huffman binary tree
@@ -223,11 +219,77 @@ public class HuffmanCode{
             k++;
         }
     }
+    public void printTree(Node root)
+    {
+        root = huffRoot;
+        while(root != null)
+                {
+                   if(root.iData == 0)
+                   {
+                       System.out.println("NODE");
+                   }
+                   //System.out.println(root.dData);
+                   if(root.leftChild != null)
+                   {
+                       System.out.println(root.leftChild.dData);
+                   }
+                   
+                   if(root.leftChild != null)
+                   {
+                       System.out.println(root.rightChild.dData);
+                   }
+                   
+                   root = root.leftChild;
+                }
+    }
     
     //reads the file and converts the characters to binary according to the code table
-    public void encodeMessage()
-    {
+     public void encodeMessage(){
+    
+        String encodedMessage = "";
         
+        Path path =  Paths.get("./input/input.txt");
+             try (BufferedReader reader = Files.newBufferedReader(path)){
+                String line;
+                
+                while((line = reader.readLine()) != null)
+                    {
+                        //converts the line read into a character array
+                        char[] stringToChar = line.toCharArray();
+                        
+                        for(int i = 0; i < stringToChar.length; i++){
+                            char tmp = stringToChar[i];
+                            
+                            String coded = encodeChar(tmp);
+                            
+                            System.out.print(coded);
+                            
+                            //System.out.print(tmp);
+                            //encodedMessage += encodeChar(tmp);
+                        }
+                        
+                    }
+                
+                
+             }catch(IOException x)
+                {
+                    System.err.format("IOException: %s%n",x);
+                }
+        
+             System.out.println(encodedMessage);
+             
+    }
+    
+    public String encodeChar(char c){
+
+        for(int i = 0; i < nodes.length - 1; i++){
+            
+            if(nodes[i].dData == c){
+                return nodes[i].binaryCode;
+            }
+        }
+        
+        return "not found";
     }
     
     //reads the encoded message by following the code table to reconstruct the message
