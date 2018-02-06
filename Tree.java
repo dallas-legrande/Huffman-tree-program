@@ -244,51 +244,59 @@ class Tree {
 	}
 
 	
-	public void displayTree() {
-		Stack<Node> globalStack = new Stack<Node>();
-		globalStack.push(root);
-		int nBlanks = nodeCount;
-		boolean isRowEmpty = false;
-		System.out.println(
-				".................................................................");
-		while (isRowEmpty==false) {
-			Stack<Node> localStack = new Stack<Node>();
-			isRowEmpty = true;
-			
-			for (int j = 0; j < nBlanks; j++) {
-				System.out.print(' ');
-			}
+	public void displayTree(Node localRoot){
+            
+            Queue<Node> lvl = new LinkedList<>();
+            Queue<Node> nextLvl = new LinkedList<>();
+            
+            int lvlCounter = 0;
+            // put local root into queue
+            lvl.add(localRoot);
+            
+            System.out.println("Huffman Tree\n-------------------");            
+            
+            while(!lvl.isEmpty()){
+                Iterator<Node> lvlItr = lvl.iterator();
+                
+                while(lvlItr.hasNext()){
+                                        
+                    Node node = lvlItr.next();
+                    
+                    if(node.leftChild != null){
+                        nextLvl.add(node.leftChild);
+                    }
+                    if(node.rightChild != null){
+                        nextLvl.add(node.rightChild);
+                    }
+                    if(node.leftChild == null && node.rightChild == null){
+                        //node is leaf
+                    }
+                    
+//                    for(int i = 0; i < counter; i++){
+//                        System.out.print(" ");
+//                    }
+//                     for(int i = 0; i <= lvlCounter; i++){
+//                        System.out.print("-");
+//                    }         
+                                       
+                    System.out.print(" " + node.dData + " ");   
+                }
+                
+                System.out.println("");
+                
+                //System.out.print("Level " + lvlCounter + " of the Huffman Tree contains:  ");
+                //System.out.println("");
+                
+                lvl = nextLvl;
+                nextLvl = new LinkedList<Node>();
+                //counter++;
+                
+                lvlCounter++;
+                
+                
+            }
+        }//end display tree method
 
-			while (globalStack.isEmpty()==false) {
-				Node temp = (Node) globalStack.pop();
-				if (temp != null) {
-					System.out.print(temp.dData);
-					localStack.push(temp.leftChild);
-					localStack.push(temp.rightChild);
-					if (temp.leftChild != null ||
-							temp.rightChild != null) {
-						isRowEmpty = false;
-					}
-				}
-				else {
-					System.out.print("--");
-					localStack.push(null);
-					localStack.push(null);
-				}
-
-				for (int j = 0; j < nBlanks*2-2; j++) {
-					System.out.print(' ');
-				}
-			} 
-			System.out.println();
-			nBlanks /= 2;
-			while (localStack.isEmpty()==false) {
-				globalStack.push(localStack.pop());
-			} // end while isRowEmpty is false
-			System.out.println(
-			".................................................................");
-		}// end while globalStack not empty
-	} // end displayTree()
         public Node findMin(){
             Node min = root;         // (assumes non-empty tree)
 		while (min.leftChild != null) {          // while min has a left child
