@@ -7,15 +7,33 @@ package huffmancode;
 
 
 
+/**
+ * Authors: Dallas LeGrande, Selene Smith
+ * Date: 2/6/18
+ * 
+ * Overview: Program #1 - Huffman Codes
+ * Program used to:
+ * 1. Accept a text message via input file (/input/input.txt)
+ * 2. Construct frequency table for characters in the message
+ * 3. Create a Huffman Tree for the message
+ * 4. Create a code table from the Huffman Tree
+ * 5. Encode the original message into binary
+ * 6. Decode the encoded message and write the decoded message as output
+ *      to an output file (/output/output.txt)
+ * 
+ * Credit to Robert Lafore, Data Structures and Algorithms in Java (2 ed.)
+ * for the TreeApp.java code used in parts of this program
+ * 
+ */
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
-
-/**
- *
- * @author Dallas
- */
 class Tree {
 	private Node root;                 // first Node of Tree
+        //public Node root;
         public static int nodeCount = 0;    // counts the total number of nodes created
 	
 	public Tree() {                    // constructor
@@ -243,8 +261,51 @@ class Tree {
                 return localRoot;
 	}
 
-	
-	public void displayTree(Node localRoot) {
+        
+        
+        public void displayTree(Node localRoot){
+            
+            Queue<Node> lvl = new LinkedList<>();
+            Queue<Node> nextLvl = new LinkedList<>();
+            int lvlCounter = 0;
+            
+            // put local root into queue
+            lvl.add(localRoot);
+            
+            System.out.println("Huffman Tree\n-------------------");            
+            
+            while(!lvl.isEmpty()){
+                Iterator<Node> lvlItr = lvl.iterator();
+                
+                while(lvlItr.hasNext()){
+                                        
+                    Node node = lvlItr.next();
+                    
+                    if(node.leftChild != null){
+                        nextLvl.add(node.leftChild);
+                    }
+                    if(node.rightChild != null){
+                        nextLvl.add(node.rightChild);
+                    }
+                    if(node.leftChild == null && node.rightChild == null){
+                        //node is leaf
+                    }
+                                       
+                    System.out.print(" " + node.dData + " ");   
+                }
+                
+                System.out.println("");
+                
+                lvl = nextLvl;
+                nextLvl = new LinkedList<Node>();
+                lvlCounter++;
+                
+                
+            }
+        }
+        
+	//alternate method for printing the tree
+	public void alternateDisplayTree(Node localRoot) {
 		Stack<Node> globalStack = new Stack<Node>();
 		globalStack.push(localRoot);
 		int nBlanks = 288+32+64+64+64+64;
@@ -306,6 +367,8 @@ class Tree {
 			
 		}// end while globalStack not empty
 	} // end displayTree()
+        
+        //finds the minimum value node in the tree
         public Node findMin(){
             Node min = root;         // (assumes non-empty tree)
 		while (min.leftChild != null) {          // while min has a left child
@@ -313,6 +376,8 @@ class Tree {
                 }
                 return min;
         }
+        
+        //finds the maximum value node in the tree
         public Node findMax(){
             Node max = root;
             while (max.rightChild != null) {          // while min has a left child
@@ -320,11 +385,5 @@ class Tree {
                 }
             return max;
         }
-        
-        public void printNodes(Node root)
-        {
-            
-        }
-    
 }// end class Tree
 ////////////////////////////////////////////////////////////////
